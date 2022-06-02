@@ -1,46 +1,17 @@
 import 'package:cellove_app/core/app_export.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-// class Cellub {
-//   final int id;
-//   final String title;
-//   final String description;
-//   final String image;
-//
-//   Cellub(
-//       {required this.id,
-//       required this.title,
-//       required this.description,
-//       required this.image});
-//
-//   factory Cellub.fromJson(Map<String, dynamic> json) {
-//     return Cellub(
-//       id: json['id'],
-//       title: json['title'],
-//       description: json['description'],
-//       image: json['image'],
-//     );
-//   }
-// }
-//
-// Future<Cellub> fetchPost() async {
-//   final response = await http.get('https://naengjanggo.shop/celub/search');
-//
-//   if (response.statusCode == 200) {
-//     // 만약 서버가 OK 응답을 반환하면, JSON을 파싱합니다.
-//     return Cellub.fromJson(json.decode(response.body));
-//   } else {
-//     // 만약 응답이 OK가 아니면, 에러를 던집니다.
-//     throw Exception('Failed to load post');
-//   }
-// }
-
 class ChatModel {
   ChatModel({
+    required this.serviceId,
+    required this.department,
+    required this.category,
+    required this.description,
+    required this.payment,
     required this.image,
     required this.title,
     required this.pinned,
@@ -54,6 +25,11 @@ class ChatModel {
     required this.groupMembers,
   });
 
+  final int serviceId;
+  final String department;
+  final String category;
+  final String description;
+  final String payment;
   final String image;
   final String title;
   final bool pinned;
@@ -67,20 +43,37 @@ class ChatModel {
   final List<String> groupMembers;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
-        image: json["image"],
+        serviceId: json["serviceId"],
+        department: json["department"],
+        category: json["category"],
+        description: json["description"],
+        payment: json["payment"],
+        image: json["mainImage"],
         title: json["title"],
-        pinned: json["pinned"],
-        muted: json["muted"],
-        archived: json["archived"],
-        name: json["name"],
-        lastMessage: json["lastMessage"],
-        date: json["date"],
-        unread: json["messagesCount"],
-        membersCount: json["membersCount"],
-        groupMembers: List<String>.from(json["groupMembers"].map((x) => x)),
+        pinned: true,
+        muted: false,
+        archived: false,
+        name: "",
+        lastMessage: '여기서 결제 가능!',
+        date: '11:36',
+        unread: 8934,
+        membersCount: '8 936',
+        groupMembers: [
+          ImageConstant.imgRectangle163,
+          ImageConstant.imgRectangle1631,
+          ImageConstant.imgRectangle1632,
+          ImageConstant.imgRectangle1633,
+          ImageConstant.imgRectangle1634,
+          ImageConstant.imgRectangle1635,
+        ],
       );
 
   Map<String, dynamic> toJson() => {
+        "serviceId": serviceId,
+        "department": department,
+        "category": category,
+        "description": description,
+        "payment": payment,
         "image": image,
         "title": title,
         "pinned": pinned,
@@ -97,41 +90,85 @@ class ChatModel {
 
 List<Map<String, dynamic>> itemsList = [
   {
-    'image': 'assets/images/celeb_img/dasha_kim.jpg',
-    'title': 'Dasha Kim',
-    'pinned': true,
-    'muted': false,
-    'archived': false,
-    'name': 'Youtuber',
-    'lastMessage': 'I posted a new video on YouTub...',
-    'date': '11:36',
-    'messagesCount': 2,
-    'membersCount': '8 936',
-    'groupMembers': [
-      ImageConstant.imgRectangle163,
-      ImageConstant.imgRectangle1631,
-      ImageConstant.imgRectangle1632,
-      ImageConstant.imgRectangle1633,
-      ImageConstant.imgRectangle1634,
-      ImageConstant.imgRectangle1635,
-    ]
+    "serviceId": 1,
+    "department": "소프트웨어융합대학",
+    "category": "음식",
+    "description": "소프트웨어융합대학 재학생 10% 할인",
+    "payment": "Y",
+    "mainImage":
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieWskP_4RSSTYG5dkBUjNHWGtnxA3hzhmmw&usqp=CAU",
+    'title': '미식반점',
   },
   {
-    'image': 'assets/images/celeb_img/forever_young.jpg',
-    'title': '인영 forever young',
-    'pinned': false,
-    'muted': false,
-    'archived': false,
-    'name': 'Youtuber',
-    'lastMessage': '여행을 사랑하는 유튜버입니다. 혼자 ...',
-    'date': '11:25',
-    'messagesCount': 2,
-    'membersCount': '2 144',
-    'groupMembers': [
-      ImageConstant.imgRectangle1636,
-      ImageConstant.imgRectangle1637,
-      ImageConstant.imgRectangle1638,
-      ImageConstant.imgRectangle1639,
-    ]
+    "serviceId": 2,
+    "department": "소프트웨어융합대학",
+    "category": "음식",
+    "title": "샐러드쿡",
+    "description":
+        "샐러드 단품 구매 시 500원 할인\n샐러드+음료 세트 구매 시 1,000원 할인\n배달 앱을 통한 주문 시 가게 요청사항에 소속 학과 기재 시 아몬드 브리즈 증정",
+    "mainImage":
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieWskP_4RSSTYG5dkBUjNHWGtnxA3hzhmmw&usqp=CAU",
+    "payment": "Y"
   },
+  {
+    "serviceId": 3,
+    "department": "소프트웨어융합대학",
+    "category": "음식",
+    "title": "스시붐",
+    "description": "현금 및 계좌이체 시 5% 할인",
+    "mainImage":
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieWskP_4RSSTYG5dkBUjNHWGtnxA3hzhmmw&usqp=CAU",
+    "payment": "Y"
+  },
+  {
+    "serviceId": 5,
+    "department": "소프트웨어융합대학",
+    "category": "음식",
+    "title": "지그재그",
+    "description": "10만원 이상 현금 및 계좌이체 시 10% 할인",
+    "mainImage":
+        "https://modo-phinf.pstatic.net/20151030_102/1446141680248CgjuG_JPEG/mosaNT9y8v.jpeg?type=f320_320",
+    "payment": "Y"
+  },
+  {
+    "serviceId": 6,
+    "department": "소프트웨어융합대학",
+    "category": "음식",
+    "title": "토스트카페마리 세종대점",
+    "description":
+        "※ 혜택 중 택 1\n• 현금 및 계좌이체 시 5% 할인\n• 1만원 이상 결제 시 5% 할인\n• 2만원 이상 결제 시 8% 할인\n• 3만원 이상 결제 시 배송비 무료",
+    "mainImage":
+        "https://cdn.econovill.com/news/photo/202104/526908_434087_102.jpg",
+    "payment": "Y"
+  },
+  {
+    "serviceId": 8,
+    "department": "소프트웨어융합대학",
+    "category": "음식",
+    "title": "리얼후라이",
+    "description": "치킨 메뉴 주문 시 2,000원 할인\n8만원 이상 단체 주문 시 10% 할인 (매장 문의)",
+    "mainImage":
+        "https://d12zq4w4guyljn.cloudfront.net/300_300_20200111084801_menu1_yWq7n26CqVPd.jpg",
+    "payment": "Y"
+  },
+  {
+    "serviceId": 7,
+    "department": "소프트웨어융합대학",
+    "category": "카페",
+    "title": "히읗히읗",
+    "description": "모든 음료 주문 시 쿠키 증정",
+    "mainImage":
+        "https://mblogthumb-phinf.pstatic.net/MjAyMDA4MThfMTQ0/MDAxNTk3NzU4NDg4NDQ2.ZKxhhm2jhGCFfPxwBv-wW9wfAFGOwbpP30OC1m15fLIg.85r_bZrCsqOw2btyXtGfoeFbUi1CHeeBayX3PFk4DJYg.JPEG.yunhoi3834/SE-c1f5e997-d9f0-49c3-8e29-6d3a2f97a027.jpg?type=w800",
+    "payment": "Y"
+  },
+  {
+    "serviceId": 4,
+    "department": "소프트웨어융합대학",
+    "category": "편의시설",
+    "title": "이철헤어커커 세종대점",
+    "description": "컷 시술 시 현금 및 계좌이체 2,000원 할인\n펌, 염색 20% 할인\n추가 할인 시 샵 문의",
+    "mainImage":
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXmqsvkWJjZRdYtajWRM_a1hmmTTV7TSUupA&usqp=CAU",
+    "payment": "N"
+  }
 ];

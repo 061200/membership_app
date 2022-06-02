@@ -1,4 +1,6 @@
 import 'package:cellove_app/presentation/chats_screen/hotplace_list.dart';
+import 'package:cellove_app/presentation/chats_screen/register_screen.dart';
+import 'package:cellove_app/presentation/payment_screen/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -10,21 +12,8 @@ class ActionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> items = [
-      {
-        'icon': ImageConstant.imgIconheart,
-        'text': '다샤가 추천한 한국에서 느끼는 호주감성 핫플',
-        'trailing': 'Show'
-      },
-      {
-        'icon': ImageConstant.imgIconheart,
-        'text': '반려동물 동반 카페 추천',
-        'trailing': 'Show'
-      },
-      {
-        'icon': ImageConstant.imgIconsearch,
-        'text': 'Search more Hot Place',
-        'trailing': ''
-      }
+      {'id': 1, 'icon': "✨", 'text': '할인받고 결제하기', 'trailing': 'Pay now'},
+      {'id': 2, 'icon': "🔎", 'text': '세종대 제휴지도 보러가기', 'trailing': 'Show'}
     ];
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -94,10 +83,11 @@ class ActionItem extends StatelessWidget {
                     width: getSize(
                       22,
                     ),
-                    child: SvgPicture.asset(
-                      item['icon'],
-                      fit: BoxFit.fill,
-                    ),
+                    // child: SvgPicture.asset(
+                    //   item['icon'],
+                    //   fit: BoxFit.fill,
+                    // ),
+                    child: Text(item['icon']),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
@@ -129,10 +119,26 @@ class ActionItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   InkWell(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const HotPlaceList())),
+                    onTap: () => {
+                      if (item['id'] == 1)
+                        {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const PaymentScreen()))
+                        }
+                      else if (item['id'] == 2)
+                        {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const HotPlaceList()))
+                        }
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (_) => const HotPlaceList()))
+                    },
                     child: Text(
                       item['trailing'],
                       overflow: TextOverflow.ellipsis,

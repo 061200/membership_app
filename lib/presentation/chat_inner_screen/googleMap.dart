@@ -38,12 +38,13 @@ class _MapViewState extends State<MapSample> {
         position: const LatLng(37.5525707, 126.9079707)));
   }
 
+  @override
   Widget build(BuildContext context) {
     // Determining the screen width & height
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return Container(
+    return SizedBox(
       height: height,
       width: width,
       child: Scaffold(

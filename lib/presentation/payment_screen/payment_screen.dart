@@ -4,17 +4,23 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cellove_app/core/app_export.dart';
-import 'models/chat_model.dart';
-import 'widgets/chats_item_widget.dart';
 import 'package:cellove_app/presentation/chat_inner_screen/chat_inner_screen.dart';
 import 'package:cellove_app/controller/count_controller.dart';
 import 'package:get/get.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
+    final controller = Get.put(PaymentController());
+    String paymentButtonText = "결제하기";
+    double amount = 0;
 
     return Scaffold(
       body: Container(
@@ -61,11 +67,11 @@ class RegisterScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                color: ColorConstant.fromHex('#ed8756'),
+                color: ColorConstant.whiteA700E5,
                 borderRadius: BorderRadius.circular(getHorizontalSize(12)),
                 boxShadow: [
                   BoxShadow(
-                    color: ColorConstant.fromHex('#ff9248'),
+                    color: Colors.grey,
                     spreadRadius: getHorizontalSize(
                       1,
                     ),
@@ -84,86 +90,52 @@ class RegisterScreen extends StatelessWidget {
                 children: [
                   const Gap(20),
                   Text(
-                    "세종대 포털 로그인",
+                    "카카오페이 결제하기",
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: getFontSize(
-                        24,
+                        20,
                       ),
-                      fontFamily: 'Gugi-Regular',
-                    ),
-                  ),
-                  const Gap(20),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: '학번',
-                      hintStyle: TextStyle(
-                        fontSize: getFontSize(
-                          16.0,
-                        ),
-                        color: ColorConstant.bluegray400,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          getHorizontalSize(
-                            8,
-                          ),
-                        ),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.only(
-                          left: getHorizontalSize(
-                            16,
-                          ),
-                          right: getHorizontalSize(
-                            10,
-                          ),
-                        ),
-                      ),
-                      prefixIconConstraints: BoxConstraints(
-                        minWidth: getSize(
-                          20,
-                        ),
-                        minHeight: getSize(
-                          20,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: ColorConstant.whiteA700,
-                      isDense: true,
-                      contentPadding: EdgeInsets.only(
-                        top: getVerticalSize(
-                          11.375,
-                        ),
-                        bottom: getVerticalSize(
-                          11.375,
-                        ),
-                      ),
-                    ),
-                    style: TextStyle(
-                      color: ColorConstant.bluegray400,
-                      fontSize: getFontSize(
-                        16.0,
-                      ),
-                      fontFamily: 'General Sans',
                       fontWeight: FontWeight.w500,
+                      fontFamily: 'SF Pro Text',
                     ),
                   ),
                   const Gap(20),
-                  TextFormField(
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        // padding: const EdgeInsets.fromLTRB(110, 0, 0, 0),
+                        child: Image.asset(
+                          'assets/images/membership_img/kakaopay.png',
+                          height: getSize(
+                            150,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextField(
+                    onChanged: (text) {
+                      setState(() {
+                        print(text);
+                        amount = double.parse(text);
+                      });
+                    },
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: '결제 금액 입력하기',
                       hintStyle: TextStyle(
                         fontSize: getFontSize(
                           16.0,
                         ),
                         color: ColorConstant.bluegray400,
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide:
+                            BorderSide(width: 1, color: Colors.redAccent),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
@@ -216,6 +188,103 @@ class RegisterScreen extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getVerticalSize(10),
+                          left: getVerticalSize(10),
+                          bottom: getVerticalSize(20),
+                        ),
+                        child: Row(
+                          children: [
+                            Text("✔ " + controller.storeName),
+                            Text(controller.sale.toString() + "% 할인"),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getVerticalSize(10),
+                          bottom: getVerticalSize(20),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: getVerticalSize(
+                                  1,
+                                ),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    amount =
+                                        amount * (100 - controller.sale) / 100;
+                                    paymentButtonText =
+                                        amount.toString() + "원 결제하기";
+                                    print(paymentButtonText);
+                                  });
+                                },
+                                child: Container(
+                                  // setState(() {
+                                  //   amount =
+                                  //       amount * (100 - controller.sale) / 100;
+                                  //   paymentButtonText =
+                                  //       amount.toString() + "원 결제하기";
+                                  // })
+                                  alignment: Alignment.center,
+                                  width: getHorizontalSize(
+                                    100,
+                                  ),
+                                  padding: EdgeInsets.only(
+                                    left: getHorizontalSize(
+                                      10,
+                                    ),
+                                    top: getVerticalSize(
+                                      7,
+                                    ),
+                                    right: getHorizontalSize(
+                                      10,
+                                    ),
+                                    bottom: getVerticalSize(
+                                      8,
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: ColorConstant.whiteA700,
+                                    borderRadius: BorderRadius.circular(
+                                      getHorizontalSize(
+                                        50,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    '적용받기',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.deepOrangeAccent,
+                                      fontSize: getFontSize(
+                                        16,
+                                      ),
+                                      fontFamily: 'SF Pro Text',
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
@@ -236,7 +305,7 @@ class RegisterScreen extends StatelessWidget {
                               ),
                               child: InkWell(
                                 onTap: () => {
-                                  controller.login(),
+                                  // controller.login(),
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -271,7 +340,7 @@ class RegisterScreen extends StatelessWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    '로그인',
+                                    paymentButtonText,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.deepOrangeAccent,

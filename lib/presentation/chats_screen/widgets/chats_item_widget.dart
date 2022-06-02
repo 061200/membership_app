@@ -6,21 +6,36 @@ import 'package:cellove_app/presentation/chat_inner_screen/chat_inner_screen.dar
 import 'package:cellove_app/presentation/chats_screen/models/chat_model.dart';
 import 'package:cellove_app/presentation/chats_screen/widgets/stacked_widgets.dart';
 import 'package:cellove_app/presentation/details/page.dart';
+import 'package:get/get.dart';
+import 'package:cellove_app/controller/count_controller.dart';
 
 class ChatsItemWidget extends StatelessWidget {
   final ChatModel item;
   const ChatsItemWidget(this.item, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (_) => const DetailsPage())),
+      onTap: () => {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const DetailsPage(),
+                settings: RouteSettings(
+                  arguments: item.serviceId,
+                )))
+      },
       child: Container(
+        width: 150,
         margin: EdgeInsets.only(
           top: getVerticalSize(6.0),
           bottom: getVerticalSize(6.0),
         ),
-        padding: const EdgeInsets.all(15),
+        // padding: EdgeInsets.only(
+        //   top: getVerticalSize(
+        //     10,
+        //   ),
+        // ),
         decoration: BoxDecoration(
           color: ColorConstant.whiteA700,
           borderRadius: BorderRadius.circular(
@@ -28,101 +43,131 @@ class ChatsItemWidget extends StatelessWidget {
               12,
             ),
           ),
+          image: DecorationImage(
+            image: NetworkImage(item.image),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Image.asset(
-                  item.image,
-                  height: getSize(
-                    64,
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: ColorConstant.whiteA700,
+                borderRadius: BorderRadius.circular(
+                  getHorizontalSize(
+                    12,
                   ),
-                  width: getSize(
-                    64,
-                  ),
-                  fit: BoxFit.fill,
                 ),
-                const Gap(8),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          item.title,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: ColorConstant.gray900,
-                            fontSize: getFontSize(
-                              16,
-                            ),
-                            fontFamily: 'General Sans',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: getHorizontalSize(
-                              4,
-                            ),
-                          ),
-                          child: SizedBox(
-                            height: getSize(
-                              16,
-                            ),
-                            width: getSize(
-                              16,
-                            ),
-                            child: item.pinned == false && item.muted == false
-                                ? const SizedBox()
-                                : SvgPicture.asset(
-                                    item.pinned == true
-                                        ? ImageConstant.imgIconpin
-                                        : ImageConstant.imgIconsoundoff1,
-                                    fit: BoxFit.fill,
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        top: getVerticalSize(
-                          2,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.max,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  // Image.asset(
+                  //   item.image,
+                  //   height: getSize(
+                  //     64,
+                  //   ),
+                  //   width: getSize(
+                  //     64,
+                  //   ),
+                  //   fit: BoxFit.fill,
+                  // ),
+                  const Gap(8),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: getHorizontalSize(
-                                    10,
+                          Container(
+                            width: 120,
+                            child: Text(
+                              item.title,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: ColorConstant.gray900,
+                                fontSize: getFontSize(
+                                  16,
+                                ),
+                                fontFamily: 'General Sans',
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: getHorizontalSize(
+                                4,
+                              ),
+                            ),
+                            child: SizedBox(
+                              height: getSize(
+                                16,
+                              ),
+                              width: getSize(
+                                16,
+                              ),
+                              child: item.pinned == false && item.muted == false
+                                  ? const SizedBox()
+                                  : SvgPicture.asset(
+                                      item.pinned == true
+                                          ? ImageConstant.imgIconpin
+                                          : ImageConstant.imgIconsoundoff1,
+                                      fit: BoxFit.fill,
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: getVerticalSize(
+                            2,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Column(
+                              // mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 150,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: item.description,
+                                      style: TextStyle(
+                                        color: ColorConstant.gray900,
+                                        fontSize: getFontSize(
+                                          14,
+                                        ),
+                                        fontFamily: 'General Sans',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    maxLines: 2,
                                   ),
                                 ),
-                                child: Text(
-                                  item.name,
+                                Text(
+                                  item.lastMessage,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    color: ColorConstant.gray900,
+                                    color: ColorConstant.bluegray400,
                                     fontSize: getFontSize(
                                       14,
                                     ),
@@ -130,110 +175,97 @@ class ChatsItemWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                item.lastMessage,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: ColorConstant.bluegray400,
-                                  fontSize: getFontSize(
-                                    14,
-                                  ),
-                                  fontFamily: 'General Sans',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Column(
-                  children: [
-                    Text(
-                      item.date,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        color: ColorConstant.bluegray400,
-                        fontSize: getFontSize(
-                          14,
-                        ),
-                        fontFamily: 'General Sans',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: getVerticalSize(
-                          17,
-                        ),
-                        bottom: getVerticalSize(
-                          1,
-                        ),
-                      ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: getSize(
-                          20,
-                        ),
-                        width: getSize(
-                          20,
-                        ),
-                        decoration: BoxDecoration(
-                          color: item.archived == false
-                              ? ColorConstant.deepPurpleA200
-                              : ColorConstant.bluegray100,
-                          borderRadius: BorderRadius.circular(
-                            getHorizontalSize(
-                              20,
+                              ],
                             ),
-                          ),
-                        ),
-                        child: Text(
-                          item.unread.toString(),
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: ColorConstant.whiteA700,
-                            fontSize: getFontSize(
-                              14,
-                            ),
-                            fontFamily: 'General Sans',
-                            fontWeight: FontWeight.w500,
-                          ),
+                          ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  const Spacer(),
+                  Column(
+                    children: [
+                      // Text(
+                      //   item.date,
+                      //   overflow: TextOverflow.ellipsis,
+                      //   textAlign: TextAlign.right,
+                      //   style: TextStyle(
+                      //     color: ColorConstant.bluegray400,
+                      //     fontSize: getFontSize(
+                      //       14,
+                      //     ),
+                      //     fontFamily: 'General Sans',
+                      //     fontWeight: FontWeight.w400,
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getVerticalSize(
+                            17,
+                          ),
+                          bottom: getVerticalSize(
+                            1,
+                          ),
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          // height: getSize(
+                          //   20,
+                          // ),
+                          // width: getSize(
+                          //   20,
+                          // ),
+                          // decoration: BoxDecoration(
+                          //   color: item.archived == false
+                          //       ? ColorConstant.deepPurpleA200
+                          //       : ColorConstant.bluegray100,
+                          //   borderRadius: BorderRadius.circular(
+                          //     getHorizontalSize(
+                          //       20,
+                          //     ),
+                          //   ),
+                          // ),
+                          // child: Text(
+                          //   item.unread.toString(),
+                          //   textAlign: TextAlign.right,
+                          //   style: TextStyle(
+                          //     color: ColorConstant.whiteA700,
+                          //     fontSize: getFontSize(
+                          //       14,
+                          //     ),
+                          //     fontFamily: 'General Sans',
+                          //     fontWeight: FontWeight.w500,
+                          //   ),
+                          // ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const Gap(16),
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                StackedWidgets(
-                  direction: TextDirection.rtl,
-                  items: item.groupMembers,
-                ),
-                const Gap(8),
-                Text(
-                  "+ ${item.membersCount}",
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: ColorConstant.bluegray400,
-                    fontSize: getFontSize(
-                      12,
-                    ),
-                    fontFamily: 'General Sans',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                // StackedWidgets(
+                //   direction: TextDirection.rtl,
+                //   items: item.groupMembers,
+                // ),
+                // const Gap(8),
+                // Text(
+                //   "+ ${item.membersCount}",
+                //   overflow: TextOverflow.ellipsis,
+                //   textAlign: TextAlign.left,
+                //   style: TextStyle(
+                //     color: ColorConstant.bluegray400,
+                //     fontSize: getFontSize(
+                //       12,
+                //     ),
+                //     fontFamily: 'General Sans',
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
                 const Spacer(),
                 InkWell(
                   onTap: () => Navigator.push(
@@ -256,26 +288,26 @@ class ChatsItemWidget extends StatelessWidget {
                         8,
                       ),
                     ),
-                    decoration: BoxDecoration(
-                      color: ColorConstant.deepPurpleA200,
-                      borderRadius: BorderRadius.circular(
-                        getHorizontalSize(
-                          50,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Show',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: ColorConstant.whiteA700,
-                        fontSize: getFontSize(
-                          14,
-                        ),
-                        fontFamily: 'SF Pro Text',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    // decoration: BoxDecoration(
+                    //   color: Colors.orangeAccent,
+                    //   borderRadius: BorderRadius.circular(
+                    //     getHorizontalSize(
+                    //       50,
+                    //     ),
+                    //   ),
+                    // ),
+                    // child: Text(
+                    //   'Show',
+                    //   textAlign: TextAlign.center,
+                    //   style: TextStyle(
+                    //     color: ColorConstant.whiteA700,
+                    //     fontSize: getFontSize(
+                    //       14,
+                    //     ),
+                    //     fontFamily: 'SF Pro Text',
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    // ),
                   ),
                 ),
               ],

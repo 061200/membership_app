@@ -5,26 +5,65 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cellove_app/core/app_export.dart';
 import 'package:cellove_app/presentation/details/widgets/action.dart';
 import 'package:cellove_app/presentation/details/widgets/category.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'package:cellove_app/presentation/chats_screen/models/store_detail.dart';
 
-class DetailsPage extends StatelessWidget {
+// Future<StoreDetail> getData(value) async {
+//   const urlPath = 'https://naengjanggo.shop/services';
+//   final url = Uri.parse(urlPath);
+//
+//   final response = await http.get(url);
+//
+//   print("헤헤");
+//   print(response.body);
+//   if (response.statusCode == 200) {
+//     print(response.body);
+//     // print(StoreDetail.fromJson(jsonDecode(response.body)));
+//     return StoreDetail.fromJson(jsonDecode(response.body));
+//   } else {
+//     // 만약 응답이 OK가 아니면, 에러를 던집니다.
+//     throw Exception('Failed to load post');
+//   }
+// }
+
+class DetailsPage extends StatefulWidget {
   const DetailsPage({Key? key}) : super(key: key);
 
   @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  late Future<StoreDetail> storeDetail;
+
+  @override
+  void initState() {
+    super.initState();
+    // storeDetail = getData(0);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final item = ModalRoute.of(context)!.settings.arguments;
+
+    // storeDetail = getData(item);
+
     return Scaffold(
-      backgroundColor: ColorConstant.fromHex('#ECE9FF'),
+      backgroundColor: ColorConstant.fromHex('#B4E197'),
       body: Stack(
         children: [
           Stack(
             alignment: Alignment.topLeft,
             children: [
               Image.asset(
-                'assets/images/celeb_img/dasha_kim.jpg',
+                'assets/images/membership_img/sushi_boom.jpg',
                 height: getSize(
                   375,
                 ),
                 width: double.infinity,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.fitHeight,
               ),
               Container(
                 width: size.width,
@@ -92,7 +131,7 @@ class DetailsPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Dasha Kim",
+                            "스시붐",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: TextStyle(
@@ -191,7 +230,7 @@ class DetailsPage extends StatelessWidget {
                           ),
                           const Gap(10),
                           Text(
-                            "Instagram : @dahyeshika 🐈💜.\n",
+                            "                       [소프트웨어융합대학]\n                  현금 및 계좌이체시 5% 할인 \n\n서울특별시 광진구 군자동 광나루로17길 14-5",
                             maxLines: null,
                             textAlign: TextAlign.left,
                             style: TextStyle(
@@ -206,14 +245,31 @@ class DetailsPage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: Text(
+                        "❤ 추천 할인메뉴 ❤",
+                        style: TextStyle(
+                          color: ColorConstant.bluegray400,
+                          fontSize: getFontSize(
+                            16,
+                          ),
+                          fontFamily: 'General Sans',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
                     SingleChildScrollView(
                       padding: const EdgeInsets.only(left: 15),
                       scrollDirection: Axis.horizontal,
                       child: Row(
                           children: [
-                        {'animal': '🐈', 'text': 'Animals'},
-                        {'animal': '🌿', 'text': 'Nature'},
-                        {'animal': '👾', 'text': 'Entertainment'}
+                        {'icon': '🍣', 'text': '따뜻한 연어초밥', 'price': '5000원'},
+                        {'icon': '🌈', 'text': '레인보우롤', 'price': '5000원'},
+                        {'icon': '🐟', 'text': '회 덮밥', 'price': '5000원'},
+                        {'icon': '🍣', 'text': '따뜻한 연어초밥2', 'price': '5000원'},
+                        {'icon': '🌈', 'text': '레인보우롤2', 'price': '5000원'},
+                        {'icon': '🐟', 'text': '회 덮밥2', 'price': '5000원'}
                       ].map<Widget>((e) => Category(e)).toList()),
                     ),
                     const Gap(15),
@@ -224,8 +280,8 @@ class DetailsPage extends StatelessWidget {
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                                 colors: [
-                              ColorConstant.fromHex('#ECE9FF'),
-                              Colors.grey.shade100
+                              ColorConstant.fromHex('#fbe1d5'),
+                              ColorConstant.fromHex('#fbe1d5'),
                             ])),
                         child: const ActionList(),
                       ),

@@ -1,6 +1,9 @@
+import 'package:cellove_app/presentation/chats_screen/landing_page.dart';
+import 'package:cellove_app/presentation/chats_screen/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cellove_app/presentation/chats_screen/chats_screen.dart';
+import 'package:get/get.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +18,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Messenger App',
       theme: ThemeData(fontFamily: 'General Sans'),
-      home: const ChatsScreen(),
+      home: LandingPage(),
     );
   }
 }

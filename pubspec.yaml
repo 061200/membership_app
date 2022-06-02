@@ -12,9 +12,11 @@ dependencies:
   cached_network_image: ^3.1.0
   flutter_svg: ^0.22.0
   gap: ^2.0.0
-  percent_indicator: ^4.0.0
+  percent_indicator: ^4.0.1
   google_maps_flutter: ^2.1.2
   http: ^0.13.4
+  get: ^4.1.4
+#  dio: ^3.0.7
 
 dev_dependencies:
   flutter_test:
@@ -27,6 +29,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/celeb_img/
+    - assets/images/membership_img/
 
   fonts:
 
@@ -41,3 +44,7 @@ flutter:
     - family: DoHyeon-Regular
       fonts:
         - asset: assets/fonts/DoHyeon-Regular.ttf
+
+    - family: Gugi-Regular
+      fonts:
+        - asset: assets/fonts/Gugi-Regular.ttf

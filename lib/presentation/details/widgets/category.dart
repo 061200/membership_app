@@ -42,7 +42,7 @@ class Category extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  category['animal'],
+                  category['icon'],
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -60,18 +60,35 @@ class Category extends StatelessWidget {
                       15,
                     ),
                   ),
-                  child: Text(
-                    category['text'],
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: ColorConstant.gray900,
-                      fontSize: getFontSize(
-                        15,
+                  child: Column(
+                    children: [
+                      Text(
+                        category['text'],
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: ColorConstant.gray900,
+                          fontSize: getFontSize(
+                            15,
+                          ),
+                          fontFamily: 'General Sans',
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                      fontFamily: 'General Sans',
-                      fontWeight: FontWeight.w500,
-                    ),
+                      Text(
+                        category['price'],
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: ColorConstant.bluegray400,
+                          fontSize: getFontSize(
+                            15,
+                          ),
+                          fontFamily: 'General Sans',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
